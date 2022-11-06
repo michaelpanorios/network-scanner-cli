@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/michaelpanorios/network-scanner-cli/issues"
   },
-  "homepage": "https://github.com/michaelpanorios/network-scanner-cli#readme"
+  "homepage": "https://github.com/michaelpanorios/network-scanner-cli#readme",
+  "dependencies": {
+    "network-scanner-js": "^1.1.5"
+  }
 }
