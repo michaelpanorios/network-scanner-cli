@@ -5,48 +5,52 @@ const program = require('commander')
 const figlet = require('figlet')
 
 program.version('0.0.1')
+program.description('Description')
+program
+       .option('-l, --lan        <string>', 'take as input an IP and analyzes which hosts are online.')
+       .option('-s, --subnet     <string>', 'take as input an ip/subnet combination and analyzes subnet aspects')
+       .option('-d, --dns        <string>', 'take as input a URL and performs a DNS lookup.')
+       .option('-st,--speed              ', 'perform a network speedtest to evaluate the networks throughtput speed')
+       .option('-t, --traceroute <string>', 'perform traceroute on the specified URL.')
+       .parse()
 
-// Commands available
-program.command('-cL <ip-address>').description('take as input an IP and analyzes which hosts are online.')//.action(lanScan)
-program.command('-cS <ip-address>').description('take as input an IP-Address/subnet combination and analyzes subnet aspects')//.action(subnet-calc)
-program.command('-cD <ip-address>').description('take as input a URL and performs a DNS lookup. ')//.action(dns-lookup)
-program.command('-cS <ip-address>').description('perform a network speedtest to evaluate the networks throughtput speed')//.action(speed-test)
-program.command('-cT <ip-address>').description('perform traceroute on the specified URL.')//.action(traceroute)
+const options = program.opts()
 
-async function lanScan(ip) {
-    netScan.ipScan('192.168.1.0-254', host => {
+
+// Lan scan example: 192.168.1.0-254
+if (options.lan) {
+    netScan.ipScan(options.lan, host => {
         console.log(host)
-      })
+    })
 }
 
-async function subnetCalculation(){
-    netScan.getSubnet('192.168.1.0/24').then((net)=>{
+// Subnet example: 192.168.1.0/24
+if (options.subnet) {
+    netScan.getSubnet(options.subnet).then((net)=>{
         console.log(net)
-    })    
+    })
 }
 
-async function dnsLookUp() {
-    netScan.lookup('w3schools.com', (addresses) => {
+// DNS example: w3schools.com
+// TODO check the dns functionality.
+if (options.dns) {
+    netScan.lookup(options.dns, (addresses) => {
         console.log(addresses)
     })
-    const subnet = await netScan.getSubnet('192.168.1.0/24')
-    console.log(subnet)
+    netScan.getSubnet(options.dns)
+    console.log( netScan.getSubnet(options.dns))
 }
 
-async function speedTest() {
-    let connectionType = 'multi' //Specifies whether you want to test with multiple connections or a single connection, set variable to 'single' if you want to test a single connection, default is multi
+if (options.speed) {
+    let connectionType = 'single' //Specifies whether you want to test with multiple connections or a single connection, set variable to 'single' if you want to test a single connection, default is multi
     netScan.speedTest(connectionType).then((speed)=>{
-        console.log(speed)
+        console.log("Your network's speed is: "+ speed)
     })
 }
 
-async function traceroute() {
-    netScan.traceroute('google.com',(hop)=>{
+// Traceroute example: google.com
+if (options.traceroute) {    
+    netScan.traceroute(options.traceroute,(hop)=>{
         console.log(hop)
     })
 }
-
-
-program.parse(process.argv)
-
-
