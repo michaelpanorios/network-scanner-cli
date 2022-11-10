@@ -17,9 +17,7 @@
   },
   "homepage": "https://github.com/michaelpanorios/network-scanner-cli#readme",
   "dependencies": {
-    "chalk": "^5.1.2",
     "commander": "^9.4.1",
-    "conf": "^10.2.0",
     "figlet": "^1.5.2",
     "network-scanner-js": "^1.1.5"
   },
