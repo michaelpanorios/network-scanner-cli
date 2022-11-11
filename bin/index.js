@@ -17,7 +17,8 @@ program.description(console.log(
                             verticalLayout: 'default',
                             width: 100,
                             whitespaceBreak: true
-                        }))
+                        })
+                        )
                     )
 
 program.option('-l, --lan        <string>', 'takes as input an IP & analyzes which hosts are online.')
@@ -34,8 +35,8 @@ const options = program.opts()
 
 // Lan scan example: 192.168.1.0-254
 if (options.lan) {
-    netScan.ipScan(options.lan, host => {
-        console.log(host)
+    netScan.ipScan(options.lan, hosts => {
+        console.log(hosts)
     })
 }
 
@@ -68,15 +69,16 @@ if (options.traceroute) {
 }
 
 // Subnet lan scan example: 192.168.1.0/24
-// if (options.sublan) {
-//     const subnet = netScan.getSubnet(options.sublan)
-//     netScan.ipScan(subnet.host_range, host => {
-//         console.log(host)
-//     })
-// }
+if (options.sublan) {
+    netScan.getSubnet(options.sublan).then((net)=>{
+        netScan.ipScan(net.host_range, host => {
+          console.log(host)
+        })
+    })
+}
 
 // LAN Scan & monitor example: '192.168.4.10', '192.168.4.18', '192.168.4.34', '192.168.4.68', '192.168.4.93','192.168.4.11'
-// if (options.lmonitor) {
-//     const hosts = [options.lmonitor]
-//     netScan.monitorCluster(hosts)
-// }
+if (options.lmonitor) {
+    const hosts = [options.lmonitor]
+    netScan.monitorCluster(hosts)
+}
