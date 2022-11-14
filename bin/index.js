@@ -99,7 +99,7 @@ if (options.lmonitor) {
 }
 
 if (options.file!==undefined && options.monitor) {
-    var array = fs.readFileSync('hosts.txt').toString().split("\n")
+    var array = fs.readFileSync(options.file).toString().split("\n")
     array.pop()
     netScan.monitorCluster(array)
 }
