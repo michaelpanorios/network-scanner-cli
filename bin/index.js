@@ -8,6 +8,7 @@ const NetworkScanner = require('network-scanner-js')
 const netScan = new NetworkScanner()
 const program = require('commander')
 const figlet = require('figlet')
+const fs = require('fs');
 
 program.version('Currently under construction v0.0.1')
 program.description(console.log(
@@ -28,6 +29,8 @@ program.option('-l, --lan        <string>', 'takes as input an IP & analyzes whi
        .option('-t, --traceroute <string>', 'performs traceroute on the specified URL.')
        .option('-sl,--sublan     <string>', 'takes as input an ip/subnet combination & perform subnet lan scan.')
        .option('-lm,--lmonitor   <string>', 'takes as input an ip range & opens a monitor portal with latency stats.')
+       .option('-f, --file       <string>', 'takes as input an ip range & writes a file with the discovered hosts')
+       .option('-m, --monitor    ', '')
        .parse()
 
 const options = program.opts()
@@ -79,6 +82,37 @@ if (options.sublan) {
 
 // LAN Scan & monitor example: '192.168.4.10', '192.168.4.18', '192.168.4.34', '192.168.4.68', '192.168.4.93','192.168.4.11'
 if (options.lmonitor) {
-    const hosts = [options.lmonitor]
-    netScan.monitorCluster(hosts)
+    hostsArray = []
+    netScan.ipScan(options.lmonitor, hosts => {
+        hostsArray.push(hosts.host)
+        const writeStream = fs.createWriteStream('hosts.txt');
+        const pathName = writeStream.path;
+        hostsArray.forEach(value => writeStream.write(`${value}\n`));
+        // handle the errors on the write process
+        writeStream.on('error', (err) => {
+            console.error(`There is an error writing the file ${pathName} => ${err}`)
+        });
+        // close the stream
+        writeStream.end();
+    })
+    console.log(`File hosts.txt created on directory: ` + __dirname)
 }
+
+if (options.file!==undefined && options.monitor) {
+    var array = fs.readFileSync('hosts.txt').toString().split("\n")
+    array.pop()
+    netScan.monitorCluster(array)
+}
+
+// ['192.168.1.10', '192.168.4.18', '192.168.4.34', '192.168.4.68', '192.168.4.93','192.168.4.11',]
+
+
+function isNotEmpty(obj) {
+    return Object.keys(obj).length !== 0;
+}
+
+
+
+
+
+
