@@ -28,9 +28,9 @@ program.option('-l, --lan        <string>', 'takes as input an IP & analyzes whi
        .option('-st,--speed              ', 'performs a network speedtest to evaluate the networks throughtput speed.')
        .option('-t, --traceroute <string>', 'performs traceroute on the specified URL.')
        .option('-sl,--sublan     <string>', 'takes as input an ip/subnet combination & perform subnet lan scan.')
-       .option('-lm,--lmonitor   <string>', 'takes as input an ip range & opens a monitor portal with latency stats.')
-       .option('-f, --file       <string>', 'takes as input an ip range & writes a file with the discovered hosts')
-       .option('-m, --monitor    ', '')
+       .option('-wh,--whosts     <string>', 'takes as input an ip range & writes the discovered hosts to .txt.')
+       .option('-f, --file       <string>', 'takes as input a file in order to be used for monitoring')
+       .option('-m, --monitor            ', 'monitoring cluster on the pre-configured web browser')
        .parse()
 
 const options = program.opts()
